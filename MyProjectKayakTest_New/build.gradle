@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+}
+
+group 'MyfirstProject.generated'
+version '1.0'
+
+def TP_SDK = 'lib/TestProject_SDK_0.65.0.jar'
+
+test {
+    useJUnitPlatform()
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+}
+
+jar {
+    // Include compiled test classes and their sources
+    from sourceSets.test.output+sourceSets.test.allSource
+
+    // Collect and zip all classes from both test and runtime configurations
+    from { configurations.testRuntimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+compileTestJava.options.compilerArgs.add '-parameters'
+
+
+compileJava.options.encoding = 'UTF-8'
+
+
+dependencies {
+    // Use JUnit Jupiter API for testing.
+    testImplementation  'org.junit.jupiter:junit-jupiter-api:5.6.0'
+
+    // Module "junit-jupiter-params" of JUnit 5.
+    testImplementation   group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.6.0'
+
+    // Use JUnit Jupiter Engine for testing.
+    testImplementation   'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+
+    implementation 'io.testproject:java-sdk:1.2.4-RELEASE'
+//    implementation 'io.testproject:java-sdk:0.6.5-RELEASE'
+    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+	implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.41.0'
+	// https://mvnrepository.com/artifact/org.testng/testng
+	testImplementation group: 'org.testng', name: 'testng', version: '7.5'
+	
+	compileOnly 'io.testproject:java-sdk:1.2.4-RELEASE'
+	
+
+}
